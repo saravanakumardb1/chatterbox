@@ -257,6 +257,9 @@ class ChatterboxTurboTTS:
         temperature=0.8,
         top_k=1000,
         norm_loudness=True,
+        # NOTE: On non-CUDA backends (e.g. Apple MPS), very large values can be extremely slow.
+        # Keep this modest unless you explicitly want a long narration.
+        max_gen_len=250,
     ):
         if audio_prompt_path:
             self.prepare_conditionals(audio_prompt_path, exaggeration=exaggeration, norm_loudness=norm_loudness)
@@ -278,6 +281,7 @@ class ChatterboxTurboTTS:
             top_k=top_k,
             top_p=top_p,
             repetition_penalty=repetition_penalty,
+            max_gen_len=max_gen_len,
         )
 
         # Remove OOV tokens and add silence to end
