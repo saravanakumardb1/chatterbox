@@ -1,0 +1,14 @@
+#!/bin/sh
+# Enforce Conventional Commits + non-empty message
+MSG_FILE=$1
+if [ ! -s "$MSG_FILE" ]; then
+  echo "Aborting commit: empty commit message" >&2
+  exit 1
+fi
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert|build)(\(.+\))?\: .{1,}'
+if ! grep -qE "$PATTERN" "$MSG_FILE"; then
+  echo "Commit message validation failed." >&2
+  echo "Use Conventional Commits (e.g. 'fix: correct typo')" >&2
+  exit 1
+fi
+exit 0
