@@ -62,7 +62,15 @@ model = ChatterboxTurboTTS.from_pretrained(device="cuda")
 text = "Hi there, Sarah here from MochaFone calling you back [chuckle], have you got one minute to chat about the billing issue?"
 
 # Generate audio (requires a reference clip for voice cloning)
-wav = model.generate(text, audio_prompt_path="your_10s_ref_clip.wav")
+# Tip: you can cap generation length and trade some quality for speed:
+# - max_gen_len: smaller = faster, can truncate long outputs
+# - n_cfm_timesteps: 1=faster/lower quality, 2=default quality
+wav = model.generate(
+    text,
+    audio_prompt_path="your_10s_ref_clip.wav",
+    max_gen_len=250,
+    n_cfm_timesteps=2,
+)
 
 ta.save("test-turbo.wav", wav, model.sr)
 ```
